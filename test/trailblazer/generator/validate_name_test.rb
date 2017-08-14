@@ -1,9 +1,17 @@
 require 'test_helper'
 
-class Trailblazer::Generator::MacroTest < Minitest::Test
+class Trailblazer::Generator::ValidateName < Minitest::Test
 
   class Op < Trailblazer::Operation
-    step Trailblazer::Generator::Macro::ValidateClassName()
+    step :validate_class!
+
+    def validate_class!(options, params:, **)
+      return true if params[:name].match REGEXP
+
+      options['failure_message'] = 'You provided an invalid class name'
+      options['error_code'] = ERROR_INVALID_CLASS_NAME
+      false
+    end
   end
 
   def test_invalid_name

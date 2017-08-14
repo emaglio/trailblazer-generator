@@ -1,16 +1,34 @@
+REGEXP = /^[A-Z][A-Za-z]{1,}(::[A-Z][A-Za-z]{1,})?/
+# Plase, keep error codes sorted alphabetically
+ERROR_INVALID_CLASS_NAME = 1
+
 class Trailblazer::Generator::Builder::Operation < Trailblazer::Operation
+
   class Cell < Trailblazer::Generator::Cell
   end
 
-  step Trailblazer::Generator::Macro::ValidateClassName()
+  step :validate_class!
   step :generate_actions!
-  failure Trailblazer::Generator::Macro::Failure()
+  failure :error!
 
-  def generate_actions!(options, params:)
+  def validate_class!(options, params:, **)
+    return true if params[:name].match REGEXP
+
+    options['failure_message'] = 'You provided an invalid class name'
+    options['error_code'] = ERROR_INVALID_CLASS_NAME
+    false
+  end
+
+  def generate_actions!(options, params:, **)
     actions = params[:options]['actions'].split(',')
     actions.each do |action|
       generate_file(options, name: params[:name], action: action)
     end
+  end
+
+  def error!(options, *)
+    puts "Error: " + options['failure_message']
+    options['error_code'] ? exit(options['error_code']) : exit(1)
   end
 
   private
