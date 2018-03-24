@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "cells-erb"
   spec.add_dependency "trailblazer"
   spec.add_dependency "thor"
+  spec.add_dependency "hanami-cli"
 
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 10.0"

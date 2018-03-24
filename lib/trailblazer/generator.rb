@@ -9,6 +9,8 @@ require "trailblazer/generator/macro"
 require "trailblazer/generator/output"
 require "trailblazer/generator/builder"
 
+require "trailblazer/generator/commands"
+
 module Trailblazer
   module Generator
     # Your code goes here...
